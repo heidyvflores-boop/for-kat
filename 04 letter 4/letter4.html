@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>things i hope you never forget · for you ♡</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-deep: #8aaec5;
+      --blue-mid: #b8d0e0;
+      --blue-soft: #d6e8f2;
+      --blue-mist: #f3f8fb;
+      --cream: #f5f0e8;
+      --cream-dark: #ede4d3;
+      --ink: #2c3a47;
+      --ink-soft: #4a5a68;
+      --ink-faint: #8a9aaa;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── CUSTOM CAT CURSOR ── */
+    * { cursor: none !important; }
+
+    #cat-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blue-mist);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 15%, rgba(138,174,197,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 80%, rgba(184,208,224,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(214,232,242,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 50% at 20% 85%, rgba(138,174,197,0.15) 0%, transparent 50%),
+        linear-gradient(160deg, #edf5fa 0%, #f3f8fb 40%, #e8f1f8 70%, #f0f7fb 100%);
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* ── SPARK CANVAS ── */
+    #spark-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── BACK NAV ── */
+    .back-nav {
+      position: fixed;
+      top: 28px; left: 32px;
+      z-index: 100;
+      animation: fadeIn 0.6s ease both;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(138,174,197,0.25);
+      border-radius: 30px;
+      padding: 8px 18px 8px 14px;
+      transition: all 0.25s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--ink-soft);
+      background: rgba(255,255,255,0.85);
+      border-color: rgba(138,174,197,0.45);
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 110px 40px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 44px;
+      animation: fadeUp 0.9s 0.15s both;
+    }
+
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 11.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blue-deep);
+      margin-bottom: 14px;
+    }
+
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.3rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .page-header h1 em {
+      font-style: italic;
+      color: var(--blue-deep);
+    }
+
+    .header-rule {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 20px auto 0;
+      max-width: 200px;
+    }
+
+    .header-rule::before { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--blue-mid)); }
+    .header-rule::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--blue-mid), transparent); }
+    .rule-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue-deep); opacity: 0.5; }
+
+    /* ── LETTER CARD ── */
+    .letter-card {
+      background: var(--cream);
+      border-radius: 4px;
+      padding: 56px 52px 52px;
+      box-shadow:
+        0 2px 0 var(--cream-dark),
+        0 6px 40px rgba(44,58,71,0.08),
+        0 1px 2px rgba(44,58,71,0.05);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.9s 0.35s both;
+    }
+
+    /* ruled lines */
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      inset: 56px 52px 52px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 31px,
+        rgba(138,174,197,0.1) 31px,
+        rgba(138,174,197,0.1) 32px
+      );
+      pointer-events: none;
+    }
+
+    /* margin rule */
+    .letter-card::after {
+      content: '';
+      position: absolute;
+      top: 56px; bottom: 52px;
+      left: 80px;
+      width: 1px;
+      background: rgba(201,169,110,0.18);
+      pointer-events: none;
+    }
+
+    .letter-inner { position: relative; z-index: 1; }
+
+    /* ── LETTER META ── */
+    .letter-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+
+    .letter-to {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--ink-faint);
+      line-height: 1.6;
+    }
+
+    .letter-to strong {
+      font-style: normal;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+    .letter-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      color: var(--ink-faint);
+      font-style: italic;
+      text-align: right;
+    }
+
+    /* ── LETTER TEXT ── */
+    .letter-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16.5px;
+      line-height: 2;
+      color: var(--ink-soft);
+    }
+
+    .letter-text p { margin-bottom: 24px; }
+    .letter-text p:last-child { margin-bottom: 0; }
+    .letter-text em { font-style: italic; color: var(--ink); }
+
+    /* ── SONG LINK ── */
+    .song-block {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(138,174,197,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .song-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .song-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--ink-soft);
+      background: rgba(138,174,197,0.1);
+      border: 1px solid rgba(138,174,197,0.35);
+      border-radius: 40px;
+      padding: 11px 24px;
+      transition: all 0.28s ease;
+    }
+
+    .song-link:hover {
+      background: rgba(138,174,197,0.2);
+      border-color: var(--blue-deep);
+      color: var(--ink);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(138,174,197,0.2);
+    }
+
+    .song-icon {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, var(--blue-mid), var(--blue-deep));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    /* ── SIGN-OFF ── */
+    .letter-signoff {
+      margin-top: 40px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(138,174,197,0.2);
+    }
+
+    .signoff-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      color: var(--ink-faint);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+
+    .signoff-name {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--ink-soft);
+    }
+
+    .signoff-seal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, var(--blue-mid), var(--blue-deep));
+      box-shadow: 0 3px 10px rgba(138,174,197,0.4);
+      color: white;
+      font-size: 12px;
+      margin-top: 16px;
+    }
+
+    /* ── FOOTER NAV ── */
+    .footer-nav {
+      text-align: center;
+      margin-top: 56px;
+      animation: fadeUp 0.9s 1s both;
+    }
+
+    .footer-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--ink-faint);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s ease;
+    }
+
+    .footer-back:hover { color: var(--ink-soft); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 90px 20px 80px; }
+      .letter-card { padding: 40px 28px 36px; }
+      .letter-card::after { left: 52px; }
+      .letter-meta { flex-direction: column; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── CAT CURSOR ── -->
+<svg id="cat-cursor" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="6,14 2,4 12,10" fill="#b8d0e0" stroke="#8aaec5" stroke-width="1"/>
+  <polygon points="30,14 34,4 24,10" fill="#b8d0e0" stroke="#8aaec5" stroke-width="1"/>
+  <polygon points="7,13 4,6 11,11" fill="#e8c4d0" opacity="0.7"/>
+  <polygon points="29,13 32,6 25,11" fill="#e8c4d0" opacity="0.7"/>
+  <ellipse cx="18" cy="20" rx="13" ry="12" fill="#deeaf3" stroke="#8aaec5" stroke-width="1.2"/>
+  <ellipse cx="13" cy="19" rx="2.2" ry="2.5" fill="#2c3a47"/>
+  <ellipse cx="23" cy="19" rx="2.2" ry="2.5" fill="#2c3a47"/>
+  <circle cx="14" cy="18" r="0.7" fill="white"/>
+  <circle cx="24" cy="18" r="0.7" fill="white"/>
+  <polygon points="18,22.5 16.5,24.5 19.5,24.5" fill="#e8a0b4"/>
+  <path d="M16.5,24.5 Q18,26.5 19.5,24.5" fill="none" stroke="#8a9aaa" stroke-width="0.9" stroke-linecap="round"/>
+  <line x1="5" y1="22" x2="13" y2="23" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+  <line x1="5" y1="24.5" x2="13" y2="24.5" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+  <line x1="31" y1="22" x2="23" y2="23" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+  <line x1="31" y1="24.5" x2="23" y2="24.5" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+</svg>
+
+<!-- ── SPARK CANVAS ── -->
+<canvas id="spark-canvas"></canvas>
+
+<nav class="back-nav">
+  <a href="../index.html" class="back-btn">← back</a>
+</nav>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="page-header">
+    <p class="eyebrow">letter no. 4</p>
+    <h1>things i hope you<br><em>never forget</em></h1>
+    <div class="header-rule"><div class="rule-dot"></div></div>
+  </header>
+
+  <!-- Letter -->
+  <div class="letter-card">
+    <div class="letter-inner">
+
+      <!-- Meta -->
+      <div class="letter-meta">
+        <div class="letter-to">
+          to: <strong>Ms. Wirth (we're still formal, yes)</strong><br>
+          from: <strong>me</strong>
+        </div>
+        <div class="letter-date">
+          <!-- ✏️ edit date -->
+          May, 2026
+        </div>
+      </div>
+
+      <!-- Letter body -->
+      <div class="letter-text">
+
+        <p>
+          <!-- ✏️ OPENING -->
+          Dear Kat,
+        </p>
+
+        <p>
+          <!-- ✏️ FIRST PARAGRAPH -->
+          I've been sitting with this for a while, maybe thinking that on some days, you forget. So I'm writing it down. Right here, where you can always come back.
+        </p>
+
+        <p>
+          <!-- ✏️ SECOND PARAGRAPH -->
+          You are allowed to take up space. All of it if necessary (we all need <3) and still your beloved ones will think of you, care about you <3
+        </p>
+
+        <p>
+          <!-- ✏️ THIRD PARAGRAPH -->
+          Bad days are on page one but this book is so much longer than that, and the parts coming (concerts, experiences, lifeeeee) are <em>worth staying for</em>.
+        </p>
+
+        <p>
+          <!-- ✏️ FOURTH PARAGRAPH -->
+          I hope you enjoy being loved and love. It doesn't disappear when you're tired, or uncertain, or not the most put-together version of yourself. It just stays. Quietly, softly, it stays. (and ofc how can someone resist to you being you and the cute you <3, and maybe... maybeeeeee that you're the most attractive woman to me, srsly how can youuuuuu).
+        </p>
+
+        <p>
+          <!-- ✏️ FIFTH PARAGRAPH — add as many as you need -->
+          Never forget that you are enough. Not almost enough. Not enough if you tried harder or slept more or worried less. Enough, right now, exactly as you are today.
+        </p>
+
+        <p>
+          <!-- ✏️ CLOSING -->
+          Keep this somewhere close. Come back to it whenever you need to. I wrote it for the days you can't hear it from your own voice, so mine can kinda say it instead.
+        </p>
+
+      </div>
+
+      <!-- Song link -->
+      <div class="song-block">
+        <span class="song-label">a song to hold alongside these words</span>
+        <a
+          class="song-link"
+          href="https://www.youtube.com/watch?v=daSp4-opaLk"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="song-icon">♪</span>
+          Eyes — Anonymouz
+        </a>
+      </div>
+
+      <!-- Sign-off -->
+      <div class="letter-signoff">
+        <p class="signoff-line">always & always,</p>
+        <p class="signoff-name"><!-- ✏️ your name --> Heidy ♡</p>
+        <div class="signoff-seal">♡</div>
+      </div>
+
+    </div>
+  </div>
+
+<div class="footer-nav">
+  <a href="../index.html" class="footer-back">← return to all letters</a>
+</div>
+
+</div>
+
+<script>
+  // ── CAT CURSOR ──
+  const cursor = document.getElementById('cat-cursor');
+  let mx = -100, my = -100, cx = -100, cy = -100;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  (function animateCursor() {
+    cx += (mx - cx) * 0.18;
+    cy += (my - cy) * 0.18;
+    cursor.style.left = cx + 'px';
+    cursor.style.top  = cy + 'px';
+    requestAnimationFrame(animateCursor);
+  })();
+
+  let lastX = 0;
+  document.addEventListener('mousemove', e => {
+    const tilt = Math.max(-12, Math.min(12, (e.clientX - lastX) * 0.6));
+    cursor.style.transform = `translate(-50%, -50%) rotate(${tilt}deg)`;
+    lastX = e.clientX;
+  });
+
+  document.addEventListener('mousedown', () => { cursor.style.transform = `translate(-50%, -50%) scale(0.82)`; });
+  document.addEventListener('mouseup',   () => { cursor.style.transform = `translate(-50%, -50%) scale(1)`; });
+
+  // ── SPARK CANVAS ──
+  const canvas = document.getElementById('spark-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = document.body.scrollHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('load',   resize);
+
+  const SHAPES = ['dot','dot','dot','cross','star4'];
+  const COLORS = [
+    'rgba(138,174,197,',
+    'rgba(184,208,224,',
+    'rgba(214,232,242,',
+    'rgba(201,169,110,',
+    'rgba(255,255,255,',
+  ];
+
+  class Spark {
+    constructor() { this.reset(true); }
+    reset(initial = false) {
+      this.x     = Math.random() * canvas.width;
+      this.y     = initial ? Math.random() * canvas.height : -10;
+      this.size  = 0.8 + Math.random() * 2.2;
+      this.speedY = 0.12 + Math.random() * 0.22;
+      this.speedX = (Math.random() - 0.5) * 0.12;
+      this.opacity    = 0;
+      this.maxOpacity = 0.08 + Math.random() * 0.14;
+      this.fadeSpeed  = 0.003 + Math.random() * 0.005;
+      this.phase      = initial ? 'visible' : 'in';
+      this.life       = 0;
+      this.maxLife    = 180 + Math.random() * 300;
+      this.color      = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.shape      = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+      this.rotation   = Math.random() * Math.PI * 2;
+      this.rotSpeed   = (Math.random() - 0.5) * 0.01;
+      this.armLen     = this.size * (1.8 + Math.random());
+      this.twinkleSpeed = 0.02 + Math.random() * 0.03;
+      this.twinklePhase = Math.random() * Math.PI * 2;
+    }
+    update() {
+      this.life++;
+      this.y += this.speedY; this.x += this.speedX;
+      this.rotation += this.rotSpeed;
+      this.twinklePhase += this.twinkleSpeed;
+      const tw = Math.sin(this.twinklePhase) * 0.2;
+      if (this.phase === 'in') {
+        this.opacity += this.fadeSpeed;
+        if (this.opacity >= this.maxOpacity) { this.opacity = this.maxOpacity; this.phase = 'visible'; }
+      } else if (this.phase === 'visible') {
+        this.opacity = this.maxOpacity + tw * this.maxOpacity;
+        if (this.life > this.maxLife * 0.7) this.phase = 'out';
+      } else {
+        this.opacity -= this.fadeSpeed * 0.7;
+        if (this.opacity <= 0) return true;
+      }
+      if (this.y > canvas.height + 20) return true;
+      return false;
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, this.opacity);
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      const c = this.color + Math.min(1, this.opacity) + ')';
+      ctx.fillStyle = c; ctx.strokeStyle = c; ctx.lineWidth = 0.6;
+      if (this.shape === 'dot') {
+        ctx.beginPath(); ctx.arc(0, 0, this.size, 0, Math.PI * 2); ctx.fill();
+      } else if (this.shape === 'cross') {
+        const a = this.armLen;
+        ctx.beginPath(); ctx.moveTo(-a,0); ctx.lineTo(a,0); ctx.moveTo(0,-a); ctx.lineTo(0,a); ctx.stroke();
+      } else if (this.shape === 'star4') {
+        const o = this.size * 0.3, a = this.armLen;
+        ctx.beginPath();
+        ctx.moveTo(0,-a); ctx.quadraticCurveTo(o,-o,a,0);
+        ctx.quadraticCurveTo(o,o,0,a); ctx.quadraticCurveTo(-o,o,-a,0);
+        ctx.quadraticCurveTo(-o,-o,0,-a); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  const sparks = [];
+  const TOTAL  = 90;
+  for (let i = 0; i < TOTAL; i++) sparks.push(new Spark());
+
+  (function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    while (sparks.length < TOTAL) sparks.push(new Spark());
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      if (sparks[i].update()) { sparks.splice(i, 1); continue; }
+      sparks[i].draw();
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>
+</body>
+</html>

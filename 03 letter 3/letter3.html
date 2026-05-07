@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>a letter for you · for you ♡</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-deep: #8aaec5;
+      --blue-mid: #b8d0e0;
+      --blue-soft: #d6e8f2;
+      --blue-mist: #f3f8fb;
+      --cream: #f5f0e8;
+      --cream-dark: #ede4d3;
+      --ink: #2c3a47;
+      --ink-soft: #4a5a68;
+      --ink-faint: #8a9aaa;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── CUSTOM CAT CURSOR ── */
+    * { cursor: none !important; }
+
+    #cat-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px;
+      height: 36px;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease;
+      will-change: transform;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blue-mist);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* watercolor bg */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 15%, rgba(138,174,197,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 80%, rgba(184,208,224,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(214,232,242,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 50% at 20% 85%, rgba(138,174,197,0.15) 0%, transparent 50%),
+        linear-gradient(160deg, #edf5fa 0%, #f3f8fb 40%, #e8f1f8 70%, #f0f7fb 100%);
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* ── SPARK CANVAS ── */
+    #spark-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── BACK NAV ── */
+    .back-nav {
+      position: fixed;
+      top: 28px; left: 32px;
+      z-index: 100;
+      animation: fadeIn 0.6s ease both;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(138,174,197,0.25);
+      border-radius: 30px;
+      padding: 8px 18px 8px 14px;
+      transition: all 0.25s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--ink-soft);
+      background: rgba(255,255,255,0.85);
+      border-color: rgba(138,174,197,0.45);
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 110px 40px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 44px;
+      animation: fadeUp 0.9s 0.15s both;
+    }
+
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 11.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blue-deep);
+      margin-bottom: 14px;
+    }
+
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.3rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .page-header h1 em {
+      font-style: italic;
+      color: var(--blue-deep);
+    }
+
+    .header-rule {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 20px auto 0;
+      max-width: 200px;
+    }
+
+    .header-rule::before { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--blue-mid)); }
+    .header-rule::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--blue-mid), transparent); }
+
+    .rule-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue-deep); opacity: 0.5; }
+
+    /* ── LETTER CARD ── */
+    .letter-card {
+      background: var(--cream);
+      border-radius: 4px;
+      padding: 56px 52px 52px;
+      box-shadow:
+        0 2px 0 var(--cream-dark),
+        0 6px 40px rgba(44,58,71,0.08),
+        0 1px 2px rgba(44,58,71,0.05);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.9s 0.35s both;
+    }
+
+    /* ruled lines */
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      inset: 56px 52px 52px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 31px,
+        rgba(138,174,197,0.1) 31px,
+        rgba(138,174,197,0.1) 32px
+      );
+      pointer-events: none;
+    }
+
+    /* margin rule */
+    .letter-card::after {
+      content: '';
+      position: absolute;
+      top: 56px; bottom: 52px;
+      left: 80px;
+      width: 1px;
+      background: rgba(201,169,110,0.18);
+      pointer-events: none;
+    }
+
+    .letter-inner { position: relative; z-index: 1; }
+
+    /* ── LETTER META ── */
+    .letter-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+
+    .letter-to {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--ink-faint);
+      line-height: 1.6;
+    }
+
+    .letter-to strong {
+      font-style: normal;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+    .letter-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      color: var(--ink-faint);
+      font-style: italic;
+      text-align: right;
+    }
+
+    /* ── LETTER TEXT ── */
+    .letter-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16.5px;
+      line-height: 2;
+      color: var(--ink-soft);
+    }
+
+    .letter-text p {
+      margin-bottom: 24px;
+    }
+
+    .letter-text p:last-child { margin-bottom: 0; }
+
+    .letter-text em {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    /* ── IMAGE PLACEHOLDERS ── */
+    .photo-slot {
+      margin: 32px 0;
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 0 3px 16px rgba(44,58,71,0.1), 0 1px 3px rgba(44,58,71,0.07);
+      position: relative;
+    }
+
+    .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* placeholder shown when no img src set */
+    .photo-slot .placeholder {
+      width: 100%;
+      height: 220px;
+      background: rgba(138,174,197,0.12);
+      border: 1.5px dashed rgba(138,174,197,0.4);
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .photo-slot .placeholder span {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--ink-faint);
+      letter-spacing: 0.06em;
+    }
+
+    .photo-slot .placeholder .ph-icon {
+      font-size: 22px;
+      opacity: 0.4;
+    }
+
+    .photo-caption {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 12px;
+      color: var(--ink-faint);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SIGN-OFF ── */
+    .letter-signoff {
+      margin-top: 40px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(138,174,197,0.2);
+    }
+
+    .signoff-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      color: var(--ink-faint);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+
+    .signoff-name {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--ink-soft);
+    }
+
+    .signoff-seal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, var(--blue-mid), var(--blue-deep));
+      box-shadow: 0 3px 10px rgba(138,174,197,0.4);
+      color: white;
+      font-size: 12px;
+      margin-top: 16px;
+    }
+
+    /* ── FOOTER NAV ── */
+    .footer-nav {
+      text-align: center;
+      margin-top: 56px;
+      animation: fadeUp 0.9s 1s both;
+    }
+
+    .footer-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--ink-faint);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s ease;
+    }
+
+    .footer-back:hover { color: var(--ink-soft); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 90px 20px 80px; }
+      .letter-card { padding: 40px 28px 36px; }
+      .letter-card::after { left: 52px; }
+      .letter-meta { flex-direction: column; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── CUSTOM CAT CURSOR ── -->
+<svg id="cat-cursor" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+  <!-- ears -->
+  <polygon points="6,14 2,4 12,10" fill="#b8d0e0" stroke="#8aaec5" stroke-width="1"/>
+  <polygon points="30,14 34,4 24,10" fill="#b8d0e0" stroke="#8aaec5" stroke-width="1"/>
+  <!-- inner ears -->
+  <polygon points="7,13 4,6 11,11" fill="#e8c4d0" opacity="0.7"/>
+  <polygon points="29,13 32,6 25,11" fill="#e8c4d0" opacity="0.7"/>
+  <!-- head -->
+  <ellipse cx="18" cy="20" rx="13" ry="12" fill="#deeaf3" stroke="#8aaec5" stroke-width="1.2"/>
+  <!-- eyes -->
+  <ellipse cx="13" cy="19" rx="2.2" ry="2.5" fill="#2c3a47"/>
+  <ellipse cx="23" cy="19" rx="2.2" ry="2.5" fill="#2c3a47"/>
+  <!-- eye shine -->
+  <circle cx="14" cy="18" r="0.7" fill="white"/>
+  <circle cx="24" cy="18" r="0.7" fill="white"/>
+  <!-- nose -->
+  <polygon points="18,22.5 16.5,24.5 19.5,24.5" fill="#e8a0b4"/>
+  <!-- mouth -->
+  <path d="M16.5,24.5 Q18,26.5 19.5,24.5" fill="none" stroke="#8a9aaa" stroke-width="0.9" stroke-linecap="round"/>
+  <!-- whiskers left -->
+  <line x1="5" y1="22" x2="13" y2="23" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+  <line x1="5" y1="24.5" x2="13" y2="24.5" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+  <!-- whiskers right -->
+  <line x1="31" y1="22" x2="23" y2="23" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+  <line x1="31" y1="24.5" x2="23" y2="24.5" stroke="#8a9aaa" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+</svg>
+
+<!-- ── SPARK CANVAS ── -->
+<canvas id="spark-canvas"></canvas>
+
+<nav class="back-nav">
+  <a href="../index.html" class="back-btn">← back</a>
+</nav>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="page-header">
+    <p class="eyebrow">letter no. 3</p>
+    <h1>a letter<br>just for <em>you</em></h1>
+    <div class="header-rule"><div class="rule-dot"></div></div>
+  </header>
+
+  <!-- Letter -->
+  <div class="letter-card">
+    <div class="letter-inner">
+
+      <!-- Meta -->
+      <div class="letter-meta">
+        <div class="letter-to">
+          to: <strong>Ms. Wirth (yes, i'm being very polite)</strong><br>
+          from: <strong>me</strong>
+        </div>
+        <div class="letter-date">
+          May, 2026
+        </div>
+      </div>
+
+      <!-- Opening -->
+      <div class="letter-text">
+        <p>
+          Love,
+        </p>
+
+        <p>
+          <!-- ✏️ FIRST PARAGRAPH -->
+          I cannot share everything that I worked with my doctor bc that is very personal information, what if you get scared, naurrrrr. But I think some things deserve to be kept somewhere, held carefully, where they won't get lost so like this website is for you to keep.
+        </p>
+
+        <p>
+          <!-- ✏️ SECOND PARAGRAPH -->
+          My doctor asked me once (and it was like a epiphanyyyyy) how I've been living with my anxiety my whole life, and long story short it made me reflect on how damaging is to surround yourself with that kind of darkness when in reality we can kinda coexist (even if it's my life and a kinda unwanted guest). This is how i was:
+        </p>
+      </div>
+
+<!-- ── PHOTO SLOT 1 ── -->
+<div class="photo-slot">
+  <img src="./photo 1.png" alt="photo 1" />
+</div>
+
+      <!-- Middle paragraphs -->
+      <div class="letter-text" style="margin-top: 28px;">
+        <p>
+          <!-- ✏️ MIDDLE PARAGRAPH -->
+          I hope you know, and because it takes sooooo much, that I believe we are meant to live our lives as a love letter to ourselves (and our innerchild, very important, too) and it helps to remind me that i wanna experience as much as i can and feel as much as i can (that includes loveeee, that's why im full of it <3), look at people, sleep as much as i want (bc that's quite necessary), enjoy my meals without rush, read, walk, lay down next to someone (you), because what's outside, and all the noise might be hard sometimes but it's okay to feel it bc it's a lesson. Not everything needs to be perfect (which applies to us as well)..
+        </p>
+
+        <p>
+          <!-- ✏️ FOURTH PARAGRAPH -->
+          And here is another cute picture that might make you smile <3
+        </p>
+      </div>
+<!-- ── PHOTO SLOT 2 ── -->
+<div class="photo-slot">
+  <img src="./photo 2.png" alt="photo 2" />
+</div>
+
+      <!-- Closing -->
+      <div class="letter-text" style="margin-top: 28px;">
+        <p>
+        </p>
+      </div>
+
+      <!-- Sign-off -->
+      <div class="letter-signoff">
+        <p class="signoff-line">with so much love,</p>
+        <p class="signoff-name"><!-- ✏️ YOUR NAME --> heidy ♡</p>
+        <div class="signoff-seal">♡</div>
+      </div>
+
+    </div>
+  </div>
+
+<div class="footer-nav">
+  <a href="../index.html" class="footer-back">← return to all letters</a>
+</div>
+
+</div>
+
+<script>
+  // ── CAT CURSOR ──
+  const cursor = document.getElementById('cat-cursor');
+  let mx = -100, my = -100;
+  let cx = -100, cy = -100;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  function animateCursor() {
+    cx += (mx - cx) * 0.18;
+    cy += (my - cy) * 0.18;
+    cursor.style.left = cx + 'px';
+    cursor.style.top  = cy + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  let lastX = 0;
+  document.addEventListener('mousemove', e => {
+    const dx = e.clientX - lastX;
+    const tilt = Math.max(-12, Math.min(12, dx * 0.6));
+    cursor.style.transform = `translate(-50%, -50%) rotate(${tilt}deg)`;
+    lastX = e.clientX;
+  });
+
+  document.addEventListener('mousedown', () => { cursor.style.transform = `translate(-50%, -50%) scale(0.82)`; });
+  document.addEventListener('mouseup',   () => { cursor.style.transform = `translate(-50%, -50%) scale(1)`; });
+
+  // ── SPARK CANVAS ──
+  const canvas = document.getElementById('spark-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = document.body.scrollHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  // re-measure after fonts/images settle
+  window.addEventListener('load', resize);
+
+  // spark shapes: 'dot', 'cross', 'star4'
+  const SHAPES = ['dot', 'dot', 'dot', 'cross', 'star4'];
+
+  // soft blue/cream palette, very low opacity
+  const COLORS = [
+    'rgba(138,174,197,',   // blue-deep
+    'rgba(184,208,224,',   // blue-mid
+    'rgba(214,232,242,',   // blue-soft
+    'rgba(201,169,110,',   // gold
+    'rgba(255,255,255,',   // white glint
+  ];
+
+  class Spark {
+    constructor() { this.reset(true); }
+
+    reset(initial = false) {
+      this.x     = Math.random() * canvas.width;
+      this.y     = initial
+                   ? Math.random() * canvas.height
+                   : -10;
+      this.size  = 0.8 + Math.random() * 2.2;       // tiny
+      this.speedY = 0.12 + Math.random() * 0.22;    // drift down very slowly
+      this.speedX = (Math.random() - 0.5) * 0.12;   // gentle horizontal sway
+      this.opacity = 0;
+      this.maxOpacity = 0.08 + Math.random() * 0.14; // very faint
+      this.fadeSpeed  = 0.003 + Math.random() * 0.005;
+      this.phase      = initial ? 'visible' : 'in';
+      this.life       = 0;
+      this.maxLife    = 180 + Math.random() * 300;   // frames
+      this.color      = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.shape      = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+      this.rotation   = Math.random() * Math.PI * 2;
+      this.rotSpeed   = (Math.random() - 0.5) * 0.01;
+      // for star4 & cross arms
+      this.armLen     = this.size * (1.8 + Math.random());
+      // twinkle
+      this.twinkleSpeed = 0.02 + Math.random() * 0.03;
+      this.twinklePhase = Math.random() * Math.PI * 2;
+    }
+
+    update() {
+      this.life++;
+      this.y        += this.speedY;
+      this.x        += this.speedX;
+      this.rotation += this.rotSpeed;
+      this.twinklePhase += this.twinkleSpeed;
+
+      // twinkle flicker ±20% of maxOpacity
+      const twinkle = Math.sin(this.twinklePhase) * 0.2;
+
+      if (this.phase === 'in') {
+        this.opacity += this.fadeSpeed;
+        if (this.opacity >= this.maxOpacity) { this.opacity = this.maxOpacity; this.phase = 'visible'; }
+      } else if (this.phase === 'visible') {
+        this.opacity = this.maxOpacity + twinkle * this.maxOpacity;
+        if (this.life > this.maxLife * 0.7) this.phase = 'out';
+      } else {
+        this.opacity -= this.fadeSpeed * 0.7;
+        if (this.opacity <= 0) return true; // dead
+      }
+
+      if (this.y > canvas.height + 20) return true;
+      return false;
+    }
+
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, this.opacity);
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle   = this.color + Math.min(1, this.opacity) + ')';
+      ctx.strokeStyle = this.color + Math.min(1, this.opacity) + ')';
+      ctx.lineWidth   = 0.6;
+
+      if (this.shape === 'dot') {
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+        ctx.fill();
+
+      } else if (this.shape === 'cross') {
+        const a = this.armLen;
+        ctx.beginPath();
+        ctx.moveTo(-a, 0); ctx.lineTo(a, 0);
+        ctx.moveTo(0, -a); ctx.lineTo(0, a);
+        ctx.stroke();
+
+      } else if (this.shape === 'star4') {
+        // four-pointed star — very delicate
+        const o = this.size * 0.3;
+        const a = this.armLen;
+        ctx.beginPath();
+        ctx.moveTo(0, -a);
+        ctx.quadraticCurveTo(o,  -o, a,  0);
+        ctx.quadraticCurveTo(o,   o, 0,  a);
+        ctx.quadraticCurveTo(-o,  o, -a, 0);
+        ctx.quadraticCurveTo(-o, -o, 0, -a);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+  }
+
+  // seed initial sparks spread across full page height
+  const sparks = [];
+  const TOTAL  = 90;
+
+  for (let i = 0; i < TOTAL; i++) sparks.push(new Spark());
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // spawn replacements
+    while (sparks.length < TOTAL) sparks.push(new Spark());
+
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const dead = sparks[i].update();
+      if (dead) { sparks.splice(i, 1); continue; }
+      sparks[i].draw();
+    }
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>
